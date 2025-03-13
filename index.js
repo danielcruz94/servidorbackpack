@@ -7,7 +7,7 @@ const connectDB = require('./dbConnection'); // Asegúrate de que la ruta es cor
 
 // Importar las rutas
 
-
+const Routes = require('./routes/clientesRoutes'); 
 const app = express();
 
 // Middleware
@@ -15,10 +15,10 @@ app.use(cors());
 app.use(express.json());
 
 // Conectar a la base de datos usando la función importada
-connectDB(); // Esta función debe encargarse de la conexión
+// connectDB(); // Esta función debe encargarse de la conexión
 
 // Rutas
-app.use('/api', clienteRoutes); // Prefijo /api para todas las rutas de cliente
+app.use('/api', Routes); // Prefijo /api para todas las rutas de cliente
 
 // Ruta de prueba
 app.get('/', (req, res) => {
