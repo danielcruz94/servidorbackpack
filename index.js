@@ -1,32 +1,32 @@
-const express = require("express");
-const fs = require("fs");
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+
+// Importar la función de conexión a la base de datos
+const connectDB = require('./dbConnection'); // Asegúrate de que la ruta es correcta
+
+// Importar las rutas
+
 
 const app = express();
-const PORT = 3000;
 
-app.get("/track", (req, res) => {
-    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    const timestamp = new Date().toISOString();
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-    const log = { ip, timestamp };
+// Conectar a la base de datos usando la función importada
+connectDB(); // Esta función debe encargarse de la conexión
 
-    // Guardar registro en un archivo JSON
-    const logFile = "views.json";
-    let logs = [];
-    if (fs.existsSync(logFile)) {
-        logs = JSON.parse(fs.readFileSync(logFile));
-    }
-    logs.push(log);
-    fs.writeFileSync(logFile, JSON.stringify(logs, null, 2));
+// Rutas
+app.use('/api', clienteRoutes); // Prefijo /api para todas las rutas de cliente
 
-    console.log(`📌 PDF abierto desde IP: ${ip} a las ${timestamp}`);
-
-    // Enviar una imagen 1x1 transparente
-    res.setHeader("Content-Type", "image/png");
-    res.send(Buffer.from(
-        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/NNJdQAAAABJRU5ErkJggg==",
-        "base64"
-    ));
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.send('Servidor funcionando');
 });
 
-app.listen(PORT, () => console.log(`🚀 Servidor de rastreo en http://localhost:${PORT}`));
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+  console.log(`Servidor corriendo en el puerto ${port}`);
+});
