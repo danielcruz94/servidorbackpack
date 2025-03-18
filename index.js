@@ -7,7 +7,7 @@ const connectDB = require('./dbConnection'); // Asegúrate de que la ruta es cor
 
 // Importar las rutas
 
-const Routes = require('./routes/clientesRoutes'); 
+const Routes = require('./Routes/clientesRoutes'); 
 const app = express();
 
 // Middleware
